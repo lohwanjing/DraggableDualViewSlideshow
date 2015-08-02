@@ -9,19 +9,54 @@
 		<meta name="keywords" content="draggable, slideshow, fullscreen, carousel, views, zoomed, 3d transform, perspective, dragdealer" />
 		<meta name="author" content="Codrops" />
 		<link rel="shortcut icon" href="../favicon.ico">
-		<link href='http://fonts.googleapis.com/css?family=Playfair+Display:900,400|Lato:300,400,700' rel='stylesheet' type='text/css'>
+		  <link rel="stylesheet" href="css/leaflet.css" />
 		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
 		<link rel="stylesheet" type="text/css" href="css/demo.css" />
 		<link rel="stylesheet" type="text/css" href="css/dragdealer.css" />
 		<link rel="stylesheet" type="text/css" href="css/component.css" />
   		<script src="js/modernizr.custom.js"></script>
+		<script src="js/jquery-1.11.2.js"></script>
+<script src="js/underscore.js"></script>
+<script src="js/backbone.js"></script>
+<script src="js/leaflet.js"></script>
+<script src="js/d3.min.js"></script>
+<script src="js/RadarChart.js"></script>
+<script src="js/mot.js"></script>
+<style>
+.map-container { height: 100%; }
+#map { height: 100%; }
+.detail-window {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+.detail-window h4 {
+    margin: 0 0 5px;
+    color: #777;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+</style>
 	</head>
 	<body>
 		<div class="container">
-			<div class="codrops-top clearfix">
-				<a class="codrops-icon codrops-icon-prev" href="http://tympanus.net/Development/HoverEffectIdeas/"><span>Previous Demo</span></a>
-				<span class="right"><a class="codrops-icon codrops-icon-drop" href="http://tympanus.net/codrops/?p=19332"><span>Back to the Codrops Article</span></a></span>
-			</div>
 			<header id="header" class="codrops-header">
 				<h1>Draggable Dual-View Slideshow</h1>
 				<span class="message">This mobile version does not have the slideshow switch</span>
@@ -84,19 +119,13 @@
 				<!-- Content section -->
 				<section class="pages">
 					<div class="content" data-content="content-1">
-						<h2>Lorem Waldy <span>Distilling design and other interesting methods</span></h2>
-						<p>It was not child's play tackling those horses. Some of the kind-hearted station folk in the backblocks had sent down some wild warrigals of the West; bucking brumbies that beat the band; old outlaws off the grass that the station hands could never master. But Colonel Cox ("Fighting Charlie" we called him) had in his command some of the crack rough-riders of Australia. And it was a joy to see these men tackle the outlaws. There were Crouch of Wagga, McDonald of Barrington, Whiteley of Wellington, Bullock of Melbourne, Sievewright of Gunnedah, Kennedy of Gloucester, Rex Moffatt of Goulburn, Harry Heath of Moree, and a score of others. Nearly every man in the regiment could sit a buck, or puff nonchalantly at his pipe while his mount pigrooted merrily. So when the wild horses were led forth there were hundreds volunteering for the honour of riding the rebels. One after another the horses were saddled up, and while the regiment cheered itself hoarse, there was enacted again and again the old-time struggle for mastery. There were plunging and reefing and rooting and sidling and rearing and bucking, as the panting chargers swung this way and that in vain endeavour to dislodge the riders. But the bush boys stuck to the saddles as the Old Man of the Sea stuck to Sindbad the Sailor, and one after another the bucking brumbies were broken and led away.</p>
-						<p>But even a plague of locusts does not last for ever—and Egypt does. Egypt the wonderful! Egypt the kaleidoscopic! No, gentle reader, do not waste your sympathies on us. It was tiresome work, marching, training—training for the front, which for months never seemed to get any nearer, and some of "the boys"—those of them who were "spoiling for a fight," as the saying is—used at times to kick over the traces and paint the town vermilion; but there are compensations in Egypt for all who would seek them. What did it matter that we had no hot cross buns for Easter, no hard-boiled eggs, no ling, no salmon? We had omelettes and quail on toast, and chicken and curry and strawberries (no cream) and oranges and custard and jelly and Turkish coffee and Nile fish and pancakes and fritters and iced butter and beautiful jam and marmalade—and cigars. So we managed to get "a snack," you see. And I know that I, for one, had no desire just then to swap places with any man in Australia.</p>
-						<p>It was night when we got back to camp. Oh, those Egyptian nights! The winter cold has gone, and spring is in the air. The nights are fine and fair, clear and cloudless, with the moon pure silver. The reflections in the Nile are just wonderful. The huge date palms stand out sharply from a star-spangled sky that somehow has a tint of green in its blue. One thinks of the Arabian Nights. The very street scenes make one think of them. Motors glide up and down the streets with rich Syrians, Greeks, Egyptians, Italians, Frenchmen and Englishmen, going to the Continental, or to Shepheard's, or to private entertainments. It is a gorgeous splash of colour. They had no motor-cars that I remember in those old Arabian Nights, but the magic of the thing and the colour of it all were surely much the same. And the roads of Egypt—how beautiful they are!—clean and smooth as a billiard table. Are there any finer roads in the whole world than the Mena road and that to Heliopolis? Fifty miles an hour is easy. I sometimes shudder now when I recall the races that we used to have along those roads at night, crying "Egre! Egre!"—Faster! Faster!</p>
-						<p class="related">
-							You might also like <a href="http://tympanus.net/Development/ArticleIntroEffects/">Inspiration for Article Intro Effects</a>
-						</p>
+						<div class="map-container">
+							<div id ="map">
+							</div>
+						</div>
 					</div>
 					<div class="content" data-content="content-2">
-						<h2>Round Table <span>King Arthur's creative team techniques</span></h2>
-						<p>Passing by the rugged Socotra, we soon sighted the mountainous southern coast of Arabia, and by midday on January 20 we were focussing our binoculars on the picturesque gate of the Indian Ocean, Aden. Curious it is how Britain has secured all the great strategical points of the world—Gibraltar, Suez, Aden, Singapore, Thursday Island, the Cape of Good Hope, and the rest. And one has only to see Aden, with its rocky peaks piercing the skyline, to realize how strong it is, and how futile would be any effort to capture it. For all the defences of Aden seem to be hewn out of solid granite.</p>
-						<p>No sooner had we got anchored in the harbour than the Suevic was surrounded by swarms of boats, in which were crowded Asiatics of all descriptions yelling like demons in wild anxiety to sell their wares. Then the colliers came alongside and proceeded to coal. Scores of thin, undersized, but wiry Arabs did the work, and as they loaded the bunkers they kept up a perpetual yelling and singing, and the weird cacophony lasted all through the night.</p>
-						<p>Aden is a curious mixture of the Orient and the Occident. In the streets silent Arabs stalk along with camels, and Europeans buzz around in automobiles. One section of the port belongs to the Asiatics; the other is all Western. Arab dhows float across the harbour and steam tugs scurry hither and yon. One section of the town has thatched roofs; the other is all galvanized iron. And one of the natives sang us "Songs of Araby." They yelled harshly for baksheesh all the while. Clad in their own coloured loin cloths, or in discarded khaki tunics from the Force, they were a motley tatterdemalion crowd. Here East and West met—but did not mingle.</p>
+						
 						<p class="related">
 							You might also like <a href="http://tympanus.net/Development/ArticleIntroEffects/">Inspiration for Article Intro Effects</a>
 						</p>
@@ -210,5 +239,11 @@
 
 			}());
 		</script>
+		<script>
+	//MOT.testFunction();
+	console.log(MOT);
+	$(document).ready(MOT.initialiseMapClosure('hello'));
+	
+</script>
 	</body>
-</html>
+</html>  
